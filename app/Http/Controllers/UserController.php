@@ -12,10 +12,11 @@ class UserController extends Controller
   {
     $request->validate([
       'nama_lengkap' => 'required|string|max:255',
-      'no_peserta'   => 'required|string|max:255|unique:users',
-      'nisn'         => 'required|string|max:255|unique:users',
+      'no_peserta'   => 'required|string|max:255|unique:users,no_peserta',
+      'nisn'         => 'required|string|max:255|unique:users,nisn',
     ]);
 
+    // Menyimpan data ke dalam tabel users menggunakan sintaks Eloquent
     User::create([
       'name'       => $request['nama_lengkap'],
       'no_peserta' => $request['no_peserta'],
