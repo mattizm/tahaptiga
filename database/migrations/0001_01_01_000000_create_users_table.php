@@ -17,12 +17,8 @@ return new class extends Migration
       $table->string('name');
       $table->string('no_peserta')->nullable();
       $table->string('nisn')->nullable();
-      $table->string('nilai')->nullable();
       $table->string('status')->nullable();
-      $table->string('upload_kartu')->nullable();
-      $table->string('upload_resi')->nullable();
       $table->string('role')->nullable();
-      $table->text('keterangan')->nullable();
       $table->string('email')->unique();
       $table->timestamp('email_verified_at')->nullable();
       $table->string('password');

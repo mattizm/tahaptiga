@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Biodata;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -25,9 +26,10 @@ class ValidasiController extends Controller
   {
     $user = User::findOrFail($id);
     $user->status     = $request->status;
-    $user->keterangan = $request->keterangan;
     $user->validator  = Auth::id();
     $user->update();
+    
+    Biodata::updateOrCreate(['user_id' => $id],['keterangan' => $request->keterangan]);
 
     return redirect()->back()->withSuccess('Data berhasil diperbaharui');
 
@@ -58,11 +60,16 @@ class ValidasiController extends Controller
       $request->upload_resi->move(public_path('upload_resi'), $namaresi);
     }
 
-    $user->upload_kartu = $namakartu;
-    $user->upload_resi  = $namaresi;
     $user->status       = 2;
     $user->update();
 
+    Biodata::updateOrCreate(
+      ['user_id' => $id],
+      [
+        'upload_kartu' => $namakartu,
+        'upload_resi'  => $namaresi
+      ]
+    );
     return redirect()->route('validasi.index',3)->withSuccess('Berhasil Memperbaharui Kartu Ujian dan Kartu Peserta');
   }
 }

@@ -42,7 +42,7 @@
             <h3 class="btn btn-sm btn-primary" >Proses Verifikasi</h3>
           @elseif($mhs->status == 3)
             <h3 class="btn btn-sm btn-warning">Perbaikan</h3><br>
-            <span style="font-size: 10pt" class="text-danger">*Catatan : {{ $mhs->keterangan }}</span>
+            <span style="font-size: 10pt" class="text-danger">*Catatan : {{ $mhs->userBio ? $mhs->userBio->keterangan : '-' }}</span>
           @elseif($mhs->status == 4)
             <h3 class="btn btn-sm btn-success">Sudah Valid</h3>
           @endif
@@ -129,8 +129,8 @@
                 <div class="col-lg-6 fv-row">
                   <label for="upload_kartu" class="btn btn-info mb-3 mb-lg-0">Upload Kartu Ujian SMUBT</label>
                   <input type="file" style="display:none;" name="upload_kartu" id="upload_kartu" class="form-control form-control-lg form-control-solid">
-                  @if ($mhs->upload_kartu)
-                    <br><span class="text-info">Kartu Ujian Anda : <a href="{{ asset('upload_kartu/'.$mhs->upload_kartu) }}">Lihat</a></span>
+                  @if ($mhs->userBio && $mhs->userBio->upload_kartu)
+                    <br><span class="text-info">Kartu Ujian Anda : <a href="{{ asset('upload_kartu/'.$mhs->userBio->upload_kartu) }}">Lihat</a></span>
                   @endif
                 </div>
                 <!--end::Col-->
@@ -138,8 +138,8 @@
                 <div class="col-lg-6 fv-row">
                   <label for="upload_resi" class="btn btn-info">Upload Resi Pembayaran</label>
                   <input type="file" style="display:none;" name="upload_resi" id="upload_resi" class="form-control form-control-lg form-control-solid">
-                  @if ($mhs->upload_resi)
-                    <br><span class="text-info">Resi Pembayaran Anda : <a href="{{ asset('upload_resi/'.$mhs->upload_resi) }}">Lihat</a></span>
+                  @if ($mhs->userBio && $mhs->userBio->upload_resi)
+                    <br><span class="text-info">Resi Pembayaran Anda : <a href="{{ asset('upload_resi/'.$mhs->userBio->upload_resi) }}">Lihat</a></span>
                   @endif
                 </div>
                 <!--end::Col-->

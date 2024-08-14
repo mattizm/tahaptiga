@@ -13,9 +13,12 @@ return new class extends Migration
   {
     Schema::create('biodatas', function (Blueprint $table) {
       $table->id();
-      $table->string('jenis_kelamin')->nullable();
-      $table->string('hp')->nullable();
-      $table->text('alamat')->nullable();
+      $table->unsignedBigInteger('user_id')->nullable();
+      $table->foreign('user_id')->references('id')->on('users');
+      $table->string('nilai')->nullable();
+      $table->string('upload_kartu')->nullable();
+      $table->string('upload_resi')->nullable();
+      $table->text('keterangan')->nullable();
       $table->timestamps();
     });
   }

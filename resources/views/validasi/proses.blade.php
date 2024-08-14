@@ -3,7 +3,7 @@
 @section('content')
   <div class="row">
     <div class="col-lg-6 col-sm-12">
-      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_1">
+      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#create_new">
         Tambah Pengguna
       </button>
       <button type="button" class="btn btn-light-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
@@ -92,10 +92,10 @@
               <!--begin::User details-->
             </td>
             <td class="text-center">
-              @if ($mahasiswa->upload_kartu || $mahasiswa->upload_resi)
-                <span><a class="badge badge-primary" href="{{ asset('upload_kartu/' . $mahasiswa->upload_kartu) }}">Lihat
+              @if ($mahasiswa->userBio && ($mahasiswa->userBio->upload_kartu || $mahasiswa->userBio->upload_resi))
+                <span><a class="badge badge-primary" href="{{ asset('upload_kartu/' . $mahasiswa->userBio->upload_kartu) }}">Lihat
                     Kartu</a></span><br>
-                <span><a class="badge badge-danger" href="{{ asset('upload_resi/' . $mahasiswa->upload_resi) }}">Lihat
+                <span><a class="badge badge-danger" href="{{ asset('upload_resi/' . $mahasiswa->userBio->upload_resi) }}">Lihat
                     Resi</a></span>
               @endif
             </td>
@@ -170,12 +170,12 @@
                 <form action="{{ route('validasi.update', $mahasiswa->id) }}" method="post">@csrf
                   <div class="modal-body">
                     <select name="status" class="form-select mb-4">
-                      <option value="4">Sudah Valid</option>
-                      <option value="3">Perbaikan</option>
-                      <option value="0">Tolak Peserta</option>
+                      <option {{ $mahasiswa->status == 4 ? 'selected' : null }} value="4">Sudah Valid</option>
+                      <option {{ $mahasiswa->status == 3 ? 'selected' : null }} value="3">Perbaikan</option>
+                      <option {{ $mahasiswa->status == 0 ? 'selected' : null }} value="0">Tolak Peserta</option>
                     </select>
                     <div class="form-floating">
-                      <textarea name="keterangan" class="form-control" placeholder="Leave a comment here" id="floatingTextarea">{{ $mahasiswa->keterangan ?? null }}</textarea>
+                      <textarea name="keterangan" class="form-control" placeholder="Leave a comment here" id="floatingTextarea">{{ $mahasiswa->userBio ? $mahasiswa->userBio->keterangan : null }}</textarea>
                       <label for="floatingTextarea">Keterangan</label>
                     </div>
                   </div>
@@ -205,7 +205,7 @@
   </div>
 
   {{-- MODAL --}}
-  <div class="modal fade" tabindex="-1" id="kt_modal_1">
+  <div class="modal fade" tabindex="-1" id="create_new">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -250,6 +250,17 @@
               <!--begin::Input-->
               <input type="text" name="nisn" value="{{ $user->nisn ?? old('nisn') }}" class="form-control form-control-solid mb-3 mb-lg-0"
                 placeholder="Masukan No Peserta" />
+              <!--end::Input-->
+            </div>
+            <!--end::Input group-->
+            <!--begin::Input group-->
+            <div class="fv-row mb-7">
+              <!--begin::Label-->
+              <label class="fw-semibold fs-6 mb-2">Nilai</label>
+              <!--end::Label-->
+              <!--begin::Input-->
+              <input type="text" name="nilai" value="{{ $user->nilai ?? old('nilai') }}" class="form-control form-control-solid mb-3 mb-lg-0"
+                placeholder="Masukan Nilai Peserta" />
               <!--end::Input-->
             </div>
             <!--end::Input group-->

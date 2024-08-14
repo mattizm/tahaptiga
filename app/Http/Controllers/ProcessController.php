@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Biodata;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -22,7 +24,7 @@ class ProcessController extends Controller
       $empat = $user->where('status', 4)->count();
       return view('dashboard', compact('satu', 'dua', 'tiga', 'empat'));
     } else {
-      if (Carbon\Carbon::parse('2024-07-16 23:50:00')->lt(Carbon\Carbon::now())) {
+      if (Carbon::parse('2024-08-16 23:50:00')->lt(Carbon::now())) {
         return view('countdown');
       } else{
         return view('mahasiswa.mahasiswa', compact('mhs'));
@@ -90,10 +92,17 @@ class ProcessController extends Controller
       [
         'name'         => $name,
         'password'     => $password,
-        'upload_kartu' => $upload_kartu,
-        'upload_resi'  => $upload_resi,
         'status'       => $status,
         'role'         => 90,
+      ]
+    );
+
+    $user_id = User::where('email', $email)->first()->id;
+    Biodata::updateOrCreate(
+      ['user_id' => $user_id],
+      [
+        'upload_kartu' => $upload_kartu,
+        'upload_resi'  => $upload_resi
       ]
     );
 
@@ -119,10 +128,16 @@ class ProcessController extends Controller
       $request->upload_resi->move(public_path('upload_resi'), $namaresi);
     }
 
-    $user->upload_kartu = $namakartu;
-    $user->upload_resi  = $namaresi;
     $user->status       = 2;
     $user->update();
+
+    Biodata::updateOrCreate(
+      ['user_id' => Auth::id()],
+      [
+        'upload_kartu' => $namakartu,
+        'upload_resi'  => $namaresi
+      ]
+    );
 
     return redirect()->back()->withSuccess('Berhasil Upload Kartu Ujian dan Kartu Peserta');
   }
@@ -130,13 +145,13 @@ class ProcessController extends Controller
   public function import(Request $request)
   {
     $request->validate([
-      'import' => 'required'
+      'import' => 'required|mimes:xls,xlsx,csv'
     ]);
 
     (new FastExcel())->import($request->import, function ($line) {
       return User::create([
         'name'       => $line['name'],
-        'password'   => $line['password'],
+        'password'   => Hash::make($line['nisn']),
         'email'      => $line['no_peserta'] . '@mail.com',
         'no_peserta' => $line['no_peserta'],
         'nisn'       => $line['nisn'],
@@ -152,6 +167,6 @@ class ProcessController extends Controller
   public function ekspor(Request $request)
   {
     $status = $request->status;
-    return (new FastExcel(User::where('status', $status)->select('name','nilai','no_peserta','nisn','upload_kartu','upload_resi')->get()))->download('peserta_valid_mandiri_II_'.now().'.xlsx');
+    return (new FastExcel(User::leftJoin('biodatas', 'users.id', '=', 'biodatas.user_id')->where('status', $status)->select('name','nilai','no_peserta','nisn','upload_kartu','upload_resi')->get()))->download('peserta_valid_mandiri_II_'.now().'.xlsx');
   }
 }

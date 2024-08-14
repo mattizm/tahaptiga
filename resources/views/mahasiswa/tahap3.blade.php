@@ -43,7 +43,7 @@
               <h3 class="btn btn-sm btn-primary" >Proses Verifikasi</h3>
             @elseif($mhs->status == 3)
               <h3 class="btn btn-sm btn-warning">Perbaikan</h3><br>
-              <span style="font-size: 10pt" class="text-danger">*Catatan : {{ $mhs->keterangan }}</span>
+              <span style="font-size: 10pt" class="text-danger">*Catatan : {{ $mhs->userBio ? $mhs->userBio->keterangan : '-' }}</span>
             @elseif($mhs->status == 4)
               <h3 class="btn btn-sm btn-success">Sudah Valid</h3>
             @endif

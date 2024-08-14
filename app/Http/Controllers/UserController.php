@@ -24,7 +24,8 @@ class UserController extends Controller
       'email'      => $request['nisn'].'@mail.com',
       'role'       => 90,
       'password'   => Hash::make($request['nisn']),
-      'status'     => 1
+      'status'     => 1,
+      'nilai'      => $request['nilai']
     ]);
 
     return redirect()->back()->with('success', 'Data berhasil disimpan');
@@ -53,7 +54,8 @@ class UserController extends Controller
       'email'      => $request['nisn'].'@mail.com',
       'role'       => 90,
       'password'   => $password,
-      'status'     => 1
+      'status'     => 1,
+      'nilai'      => $request['nilai']
     ]);
 
     return redirect()->back()->with('success', 'Data berhasil disimpan');
