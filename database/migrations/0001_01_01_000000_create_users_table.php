@@ -17,6 +17,7 @@ return new class extends Migration
       $table->string('name');
       $table->string('no_peserta')->nullable();
       $table->string('nisn')->nullable();
+      $table->string('nilai')->nullable();
       $table->string('status')->nullable();
       $table->string('role')->nullable();
       $table->string('email')->unique();

@@ -15,7 +15,6 @@ return new class extends Migration
       $table->id();
       $table->unsignedBigInteger('user_id')->nullable();
       $table->foreign('user_id')->references('id')->on('users');
-      $table->string('nilai')->nullable();
       $table->string('upload_kartu')->nullable();
       $table->string('upload_resi')->nullable();
       $table->text('keterangan')->nullable();
